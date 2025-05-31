@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Создаем директорию для загрузок
+# IF NOT
 RUN mkdir -p /app/uploads
 RUN chmod 777 /app/uploads
 
