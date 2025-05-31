@@ -44,6 +44,11 @@
         </div>
     </nav>
 
+    <head>
+    <!-- ... другие теги ... -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-icons/bootstrap-icons.css') }}">
+</head>
+
     <div class="container my-4">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
