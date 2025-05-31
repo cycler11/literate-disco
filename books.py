@@ -18,6 +18,34 @@ def index():
     books = Book.query.all()
     return render_template('books/index.html', books=books)
 
+
+@books_bp.route('/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete(id):
+    book = Book.query.get_or_404(id)
+    
+    # Проверка прав доступа
+    if current_user.role not in ['admin', 'librarian']:
+        flash('У вас нет прав для удаления книг', 'danger')
+        return redirect(url_for('books.index'))
+    
+    if request.method == 'POST':
+        # Удаляем файл книги, если он существует
+        if book.file_path and os.path.exists(book.file_path):
+            try:
+                os.remove(book.file_path)
+            except Exception as e:
+                app.logger.error(f"Ошибка при удалении файла: {str(e)}")
+        
+        # Удаляем книгу из базы данных
+        db.session.delete(book)
+        db.session.commit()
+        
+        flash('Книга успешно удалена', 'success')
+        return redirect(url_for('books.index'))
+    
+    return render_template('books/delete.html', book=book)
+
 @books_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
@@ -75,6 +103,9 @@ def download(id):
     if not book.file_path or not os.path.exists(book.file_path):
         flash('Файл для этой книги отсутствует', 'danger')
         return redirect(url_for('books.detail', id=id))
+
+
+
 
     directory = os.path.dirname(book.file_path)
     filename = os.path.basename(book.file_path)
