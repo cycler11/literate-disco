@@ -26,6 +26,15 @@
                 <a href="{{ url_for('books.detail', id=book.id) }}" class="btn btn-sm btn-primary">
                     <i class="bi bi-info-circle"></i> Подробнее
                 </a>
+                
+                {% if current_user.role in ['admin', 'librarian'] %}
+                <a href="{{ url_for('books.edit', id=book.id) }}" class="btn btn-sm btn-warning">
+                    <i class="bi bi-pencil"></i> Изменить
+                </a>
+                <a href="{{ url_for('books.delete', id=book.id) }}" class="btn btn-sm btn-danger">
+                    <i class="bi bi-trash"></i> Удалить
+                </a>
+                {% endif %}
             </div>
         </div>
     </div>
