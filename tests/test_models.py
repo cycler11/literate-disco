@@ -1,46 +1,62 @@
 import pytest
-from flask import Flask
-from extensions import db
 from models import User, Book
+from extensions import db
 
-@pytest.fixture
-def app():
-    # Create a Flask app configured for testing
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['TESTING'] = True
-    db.init_app(app)
+def test_user_password_hashing(app, init_database):
+    """
+    Проверяем, что при установке пароля он хэштируется,
+    а метод verify_password корректно проверяет и валидный, и
+    невалидный пароль.
+    """
     with app.app_context():
-        db.create_all()
-        yield app
-        db.session.remove()
-        db.drop_all()
+        u = User(username='testuser', role='reader')
+        u.password = 'mypassword'
+        db.session.add(u)
+        db.session.commit()
 
+        fetched = User.query.filter_by(username='testuser').first()
+        assert fetched is not None, "Пользователь не был сохранён в БД"
+        assert fetched.verify_password('mypassword'), "Верный пароль не прошёл проверку"
+        assert not fetched.verify_password('wrongpassword'), "Неверный пароль ошибочно проходит проверку"
 
-def test_user_password(app):
-    # Test that setting a password hashes correctly and verify_password works
-    user = User(username='testuser', role='reader')
-    user.password = 'secret'
-    assert user.verify_password('secret')
-    assert not user.verify_password('wrong')
+def test_book_model_crud(app, init_database):
+    """
+    Проверяем операции CRUD для модели Book:
+    - создание книги с ссылки на пользователя
+    - чтение
+    - обновление
+    - удаление
+    """
+    with app.app_context():
+        # Находим заранее созданного admin-пользователя
+        user = User.query.filter_by(username='admin').first()
+        assert user is not None, "Админ-пользователь из INITIAL_USERS не создан"
 
+        # Создаём книгу
+        book = Book(
+            title='Test Book',
+            author='Author',
+            year=2020,
+            added_by=user.id
+        )
+        db.session.add(book)
+        db.session.commit()
 
-def test_book_model_crud(app):
-    # Test basic CRUD operations for Book model
-    book = Book(title='Test Title', author='Author Name', year=2021,
-                added_by=1, file_path='path/to/file.pdf', file_name='file.pdf')
-    db.session.add(book)
-    db.session.commit()
-    # There should be exactly one book in the database
-    assert Book.query.count() == 1
-    retrieved = Book.query.first()
-    assert retrieved.title == 'Test Title'
-    # Test update
-    retrieved.title = 'New Title'
-    db.session.commit()
-    updated = Book.query.first()
-    assert updated.title == 'New Title'
-    # Test delete
-    db.session.delete(updated)
-    db.session.commit()
-    assert Book.query.count() == 0
+        # Читаем эту книгу
+        fetched = Book.query.filter_by(title='Test Book').first()
+        assert fetched is not None, "Книга не найдена после создания"
+        assert fetched.author == 'Author'
+        assert fetched.year == 2020
+        assert fetched.added_by == user.id
+
+        # Обновляем книгу
+        fetched.title = 'Updated Title'
+        db.session.commit()
+        updated = Book.query.get(fetched.id)
+        assert updated.title == 'Updated Title', "Название книги не обновилось"
+
+        # Удаляем книгу
+        db.session.delete(updated)
+        db.session.commit()
+        deleted = Book.query.get(fetched.id)
+        assert deleted is None, "Книга не удалена"
