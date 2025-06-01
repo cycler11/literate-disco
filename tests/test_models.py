@@ -32,20 +32,20 @@ def test_book_model_crud(app, init_database):
         db.session.add(book)
         db.session.commit()
 
-        # Читаем эту книгу
+
         fetched = Book.query.filter_by(title='Test Book').first()
         assert fetched is not None, "no book was found"
         assert fetched.author == 'Author'
         assert fetched.year == 2020
         assert fetched.added_by == user.id
 
-        # Обновляем книгу
+
         fetched.title = 'Updated Title'
         db.session.commit()
         updated = Book.query.get(fetched.id)
         assert updated.title == 'Updated Title', "no name"
 
-        # Удаляем книгу
+
         db.session.delete(updated)
         db.session.commit()
         deleted = Book.query.get(fetched.id)
