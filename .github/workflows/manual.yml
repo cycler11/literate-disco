@@ -37,6 +37,11 @@ jobs:
     - name: Run TruffleHog scan
       run: trufflehog git --json --repo_path . 
 
+    - name: Run Bandit security scan
+      run: |
+        pip install bandit
+        bandit -r .
+
     - name: Run Qodana scan
       uses: jetbrains/qodana-action@v2023.3
       with:
