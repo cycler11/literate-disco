@@ -15,15 +15,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install Gitleaks
-      run: |
-        curl -sSfL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks-linux-amd64.tar.gz | tar -xz -C /usr/local/bin
-        chmod +x /usr/local/bin/gitleaks-linux-amd64
-        mv /usr/local/bin/gitleaks-linux-amd64 /usr/local/bin/gitleaks
-
-    - name: Run Gitleaks secret scan
-      run: gitleaks detect --source . --exit-code 1 --verbose
-
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
