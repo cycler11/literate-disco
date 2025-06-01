@@ -25,11 +25,8 @@ jobs:
       with:
         verbose: true
 
-    - name: Install TruffleHog
-      run: pip install trufflehog
-
-    - name: Run TruffleHog scan
-      run: trufflehog git --json . || exit 1
+    - name: Run Detect Secrets scan
+      uses: Yelp/detect-secrets-action@v1
 
     - name: Install dependencies
       run: |
