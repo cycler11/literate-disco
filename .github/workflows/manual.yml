@@ -12,24 +12,34 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
+    - name: Install Gitleaks
+      run: |
+        curl -sSfL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks-linux-amd64.tar.gz | tar -xz -C /usr/local/bin
+        chmod +x /usr/local/bin/gitleaks-linux-amd64
+        mv /usr/local/bin/gitleaks-linux-amd64 /usr/local/bin/gitleaks
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install flake8 black mypy
+    - name: Run Gitleaks secret scan
+      run: gitleaks detect --source . --exit-code 1 --verbose
 
-      - name: Run linters
-        run: |
-          flake8 .
-          black .
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install flake8 black mypy
+
+    - name: Run linters
+      run: |
+        flake8 .
+        black .
+
 
   test:
     runs-on: ubuntu-latest
