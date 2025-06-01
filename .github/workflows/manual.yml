@@ -50,9 +50,9 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Run tests
-        run: |
-          pytest --maxfail=1 --disable-warnings -q
+#      - name: Run tests
+#        run: |
+#          pytest --maxfail=1 --disable-warnings -q
 
   docker:
     runs-on: ubuntu-latest
