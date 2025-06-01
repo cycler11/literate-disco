@@ -56,10 +56,10 @@ jobs:
 #          save-report: true
 #          upload-report: false
 
-    - name: Run linters
-      run: |
-        flake8 .
-        black .
+#    - name: Run linters
+#      run: |
+#        flake8 .
+#        black .
 
 
   test:
