@@ -126,7 +126,9 @@ def edit(id):
                     try:
                         os.remove(book.file_path)
                     except Exception as e:
-                        current_app.logger.error(f"Ошибка при удалении файла: {str(e)}")
+                        current_app.logger.error(
+                            f"Ошибка при удалении файла: {str(e)}"
+                        )
 
                 # Сохраняем новый файл
                 filename = secure_filename(file.filename)
@@ -140,11 +142,15 @@ def edit(id):
                 flash("Файл успешно обновлен", "success")
             else:
                 flash("Недопустимый формат файла", "danger")
-                return redirect(url_for("books.edit", id=id))
+                return redirect(
+                    url_for("books.edit", id=id)
+                )
 
         db.session.commit()
         flash("Книга успешно обновлена", "success")
-        return redirect(url_for("books.detail", id=id))
+        return redirect(
+            url_for("books.detail", id=id)
+        )
 
     return render_template("books/edit.html", book=book)
 
@@ -165,7 +171,9 @@ def delete(id):
             try:
                 os.remove(book.file_path)
             except Exception as e:
-                current_app.logger.error(f"Ошибка при удалении файла: {str(e)}")
+                current_app.logger.error(
+                    f"Ошибка при удалении файла: {str(e)}"
+                )
 
         # Удаляем книгу из базы данных
         db.session.delete(book)
