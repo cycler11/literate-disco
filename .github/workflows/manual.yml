@@ -21,14 +21,15 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install TruffleHog
+      - name: Install TruffleHog v3
         run: |
           python3 -m pip install --upgrade pip
-          pip install trufflehog
+          pip install "trufflehog>=3.0.0"
 
       - name: Run TruffleHog
         run: |
-          trufflehog git --repo-path .
+          trufflehog git .
+
 
 
   lint:
