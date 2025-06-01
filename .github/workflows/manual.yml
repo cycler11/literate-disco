@@ -37,6 +37,13 @@ jobs:
     - name: Run TruffleHog scan
       run: trufflehog git --json --repo_path . 
 
+    - name: Run Qodana scan
+      uses: jetbrains/qodana-action@v2023.3
+      with:
+          project-dir: .
+          save-report: true
+          upload-report: false
+
     - name: Run linters
       run: |
         flake8 .
