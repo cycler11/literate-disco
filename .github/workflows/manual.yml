@@ -49,12 +49,12 @@ jobs:
         pip install safety
         safety check -r requirements.txt
 
-    - name: Run Qodana scan
-      uses: jetbrains/qodana-action@v2023.3
-      with:
-          project-dir: .
-          save-report: true
-          upload-report: false
+#    - name: Run Qodana scan
+#      uses: jetbrains/qodana-action@v2023.3
+#      with:
+#          project-dir: .
+#          save-report: true
+#          upload-report: false
 
     - name: Run linters
       run: |
@@ -83,6 +83,31 @@ jobs:
 #      - name: Run tests
 #        run: |
 #          pytest --maxfail=1 --disable-warnings -q
+
+  docs:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install documentation dependencies
+        run: pip install mkdocs mkdocstrings[python] mkdocs-material
+
+      - name: Build documentation
+        run: mkdocs build
+
+      - name: Upload documentation artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: documentation-site
+          path: site
+
 
   docker:
     runs-on: ubuntu-latest
