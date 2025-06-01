@@ -42,6 +42,11 @@ jobs:
         pip install bandit
         bandit -r .
 
+    - name: Run Safety vulnerability scan
+      run: |
+        pip install safety
+        safety check -r requirements.txt
+
     - name: Run Qodana scan
       uses: jetbrains/qodana-action@v2023.3
       with:
