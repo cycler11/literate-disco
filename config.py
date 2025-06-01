@@ -26,8 +26,8 @@ class Config:
 
     INITIAL_USERS = [
         {"username": "admin", "password": "adminpass", "role": "admin"},
-        {"username": "librarian1", "password": "libpass1", "role": "librarian"},
+        {"username": "librarian1", "password": "libpass1", "role": "librari"},
         {"username": "reader1", "password": "readpass1", "role": "reader"},
-        {"username": "analyst1", "password": "analpass1", "role": "analyst"},
+        {"username": "analyst1", "password": "anpass1", "role": "analyst"},
         {"username": "guest", "password": "guestpass", "role": "guest"},
     ]
