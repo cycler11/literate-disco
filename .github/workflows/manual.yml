@@ -20,6 +20,11 @@ jobs:
       with:
         python-version: '3.11'
 
+    - name: Run Gitleaks secret scan
+      uses: zricethezav/gitleaks-action@v2
+      with:
+        verbose: true
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
