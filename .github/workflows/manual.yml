@@ -95,14 +95,17 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install pdoc
-        run: pip install pdoc
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pdoc
 
-      - name: Generate documentation
+      - name: Generate documentation with pdoc
         run: |
           export PYTHONPATH=$(pwd)
           mkdir -p docs_html
-          pdoc -o docs_html main  # или другие .py файлы
+          pdoc main auth books config extensions models run -o docs_html
 
       - name: Upload documentation artifact
         uses: actions/upload-artifact@v4
