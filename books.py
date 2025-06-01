@@ -7,6 +7,7 @@ from flask import (
     flash,
     request,
     send_from_directory,
+    current_app,
 )
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
@@ -125,7 +126,7 @@ def edit(id):
                     try:
                         os.remove(book.file_path)
                     except Exception as e:
-                        app.logger.error(f"Ошибка при удалении файла: {str(e)}")
+                        current_app.logger.error(f"Ошибка при удалении файла: {str(e)}")
 
                 # Сохраняем новый файл
                 filename = secure_filename(file.filename)
@@ -164,7 +165,7 @@ def delete(id):
             try:
                 os.remove(book.file_path)
             except Exception as e:
-                app.logger.error(f"Ошибка при удалении файла: {str(e)}")
+                current_app.logger.error(f"Ошибка при удалении файла: {str(e)}")
 
         # Удаляем книгу из базы данных
         db.session.delete(book)
