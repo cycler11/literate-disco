@@ -60,7 +60,7 @@ def create():
                 flash("Файл успешно загружен", "success")
             else:
                 flash(
-                    "Недопустимый формат файла. Разрешены: pdf, epub, doc, txt",
+                    "Недопустимый формат файла. Разрешены: pdf, epub, doc",
                     "danger",
                 )
                 return redirect(url_for("books.create"))
