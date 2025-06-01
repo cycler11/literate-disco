@@ -16,18 +16,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Download TruffleHog latest Linux binary
+      - name: Download TruffleHog Linux amd64 binary
         run: |
+          # Получаем URL правильного бинарника linux_amd64
           latest_url=$(curl -s https://api.github.com/repos/trufflesecurity/trufflehog/releases/latest \
-            | grep "browser_download_url.*linux_amd64" \
-            | head -n 1 \
-            | cut -d '"' -f 4)
-          curl -L $latest_url -o trufflehog
+            | jq -r '.assets[] | select(.name | test("linux_amd64")) | .browser_download_url' | head -n1)
+          
+          echo "Downloading $latest_url"
+          curl -L "$latest_url" -o trufflehog
           chmod +x trufflehog
 
       - name: Run TruffleHog scan
         run: |
           ./trufflehog git file://$(pwd)
+
 
 
   lint:
