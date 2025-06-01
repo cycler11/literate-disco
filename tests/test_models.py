@@ -3,11 +3,7 @@ from models import User, Book
 from extensions import db
 
 def test_user_password_hashing(app, init_database):
-    """
-    Проверяем, что при установке пароля он хэштируется,
-    а метод verify_password корректно проверяет и валидный, и
-    невалидный пароль.
-    """
+
     with app.app_context():
         u = User(username='testuser', role='reader')
         u.password = 'mypassword'
@@ -15,24 +11,18 @@ def test_user_password_hashing(app, init_database):
         db.session.commit()
 
         fetched = User.query.filter_by(username='testuser').first()
-        assert fetched is not None, "Пользователь не был сохранён в БД"
-        assert fetched.verify_password('mypassword'), "Верный пароль не прошёл проверку"
-        assert not fetched.verify_password('wrongpassword'), "Неверный пароль ошибочно проходит проверку"
+        assert fetched is not None, "No saved user"
+        assert fetched.verify_password('mypassword'), "wrong pass"
+        assert not fetched.verify_password('wrongpassword'), "whhwhw"
 
 def test_book_model_crud(app, init_database):
-    """
-    Проверяем операции CRUD для модели Book:
-    - создание книги с ссылки на пользователя
-    - чтение
-    - обновление
-    - удаление
-    """
-    with app.app_context():
-        # Находим заранее созданного admin-пользователя
-        user = User.query.filter_by(username='admin').first()
-        assert user is not None, "Админ-пользователь из INITIAL_USERS не создан"
 
-        # Создаём книгу
+    with app.app_context():
+
+        user = User.query.filter_by(username='admin').first()
+        assert user is not None, "admin is not created"
+
+
         book = Book(
             title='Test Book',
             author='Author',
@@ -44,7 +34,7 @@ def test_book_model_crud(app, init_database):
 
         # Читаем эту книгу
         fetched = Book.query.filter_by(title='Test Book').first()
-        assert fetched is not None, "Книга не найдена после создания"
+        assert fetched is not None, "no book was found"
         assert fetched.author == 'Author'
         assert fetched.year == 2020
         assert fetched.added_by == user.id
@@ -53,10 +43,10 @@ def test_book_model_crud(app, init_database):
         fetched.title = 'Updated Title'
         db.session.commit()
         updated = Book.query.get(fetched.id)
-        assert updated.title == 'Updated Title', "Название книги не обновилось"
+        assert updated.title == 'Updated Title', "no name"
 
         # Удаляем книгу
         db.session.delete(updated)
         db.session.commit()
         deleted = Book.query.get(fetched.id)
-        assert deleted is None, "Книга не удалена"
+        assert deleted is None, "no delete"
