@@ -3,6 +3,12 @@ from flask import Flask, render_template
 from extensions import db, login_manager
 from config import Config
 
+# Регистрация Blueprint'ов
+from auth import auth_bp
+from books import books_bp
+from main import main_bp
+
+
 app = Flask(__name__)
 app.config.from_object(Config)
 
@@ -17,10 +23,6 @@ login_manager.init_app(app)
 # Создаем папку для загрузок, если ее нет
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
-# Регистрация Blueprint'ов
-from auth import auth_bp
-from books import books_bp
-from main import main_bp
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(books_bp)
