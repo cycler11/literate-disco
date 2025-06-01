@@ -100,8 +100,9 @@ jobs:
 
       - name: Generate documentation
         run: |
+          export PYTHONPATH=$(pwd)
           mkdir -p docs_html
-          pdoc -o docs_html literate_disco
+          pdoc -o docs_html main  # или другие .py файлы
 
       - name: Upload documentation artifact
         uses: actions/upload-artifact@v4
