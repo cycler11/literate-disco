@@ -99,10 +99,11 @@ jobs:
       - name: Install documentation dependencies
         run: pip install mkdocs mkdocstrings[python] mkdocs-material
       
-      - name: Build docs with PYTHONPATH
-        run: |
-          export PYTHONPATH=$(pwd)
-          mkdocs build
+      - name: Install package
+        run: pip install -e .
+
+      - name: Build docs
+        run: mkdocs build
 
       - name: Upload documentation artifact
         uses: actions/upload-artifact@v4
