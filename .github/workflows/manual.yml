@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  check:
+  Safety_Checks:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -49,22 +49,23 @@ jobs:
         pip install safety
         safety check -r requirements.txt
 
-    - name: Run Qodana scan
-      uses: jetbrains/qodana-action@v2023.3
-      with:
-          project-dir: .
-          save-report: true
-          upload-report: false
-
     - name: Run linter black
       run: black .
 
     - name: Run linter flake8
       run: flake8 .
 
-  test:
+    - name: Run Qodana scan
+      uses: jetbrains/qodana-action@v2023.3
+      with:
+          project-dir: .
+          save-report: true
+          upload-report: false
+          
+
+  Un_Tests:
     runs-on: ubuntu-latest
-    needs: check
+    needs: Safety_Checks
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -86,7 +87,7 @@ jobs:
         run: |
              pytest --maxfail=100 --disable-warnings -q || true
 
-  docs:
+  Documents_Creation:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -118,7 +119,7 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
-    needs: test
+    needs: Un_Tests
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
