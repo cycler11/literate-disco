@@ -3,7 +3,7 @@ from run import app as flask_app
 
 @pytest.fixture
 def client():
-    # Configure Flask test client
+
     flask_app.config['TESTING'] = True
     flask_app.config['WTF_CSRF_ENABLED'] = False
     with flask_app.test_client() as client:
@@ -13,13 +13,13 @@ def client():
 def test_index_route(client):
     response = client.get('/')
     assert response.status_code == 200
-    # The index page should contain at least some HTML
+
     assert b'<html' in response.data or b'<!DOCTYPE' in response.data
 
 
 def test_login_page_loads(client):
     response = client.get('/login')
-    # Unauthenticated users should see login form (status 200)
+
     assert response.status_code == 200
     assert b'<form' in response.data
 
