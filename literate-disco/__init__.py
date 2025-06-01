@@ -1,1 +1,1 @@
-print ("hrllo")
+print("hrllo")
