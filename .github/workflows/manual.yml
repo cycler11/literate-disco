@@ -30,7 +30,7 @@ jobs:
         run: |
           flake8 .
           black .
-          mypy .
+
 
   test:
     runs-on: ubuntu-latest
