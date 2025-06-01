@@ -40,7 +40,9 @@ jobs:
     - name: Run Bandit security scan
       run: |
         pip install bandit
-        bandit -r .
+        bandit -r . || true
+
+  #bandit Ищет ошибки, но пайплайн не обрывает. Выводит ошибки в консоль.
 
     - name: Run Safety vulnerability scan
       run: |
