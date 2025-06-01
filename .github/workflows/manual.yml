@@ -25,6 +25,12 @@ jobs:
       with:
         verbose: true
 
+    - name: Install TruffleHog
+      run: pip install trufflehog
+
+    - name: Run TruffleHog scan
+      run: trufflehog git --json . || exit 1
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
