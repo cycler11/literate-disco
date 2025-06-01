@@ -16,19 +16,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Install TruffleHog v3
+      - name: Download TruffleHog latest Linux binary
         run: |
-          python3 -m pip install --upgrade pip
-          pip install "trufflehog>=3.0.0"
+          latest_url=$(curl -s https://api.github.com/repos/trufflesecurity/trufflehog/releases/latest \
+            | grep "browser_download_url.*linux_amd64" \
+            | cut -d '"' -f 4)
+          curl -L $latest_url -o trufflehog
+          chmod +x trufflehog
 
-      - name: Run TruffleHog
+      - name: Run TruffleHog scan
         run: |
-          trufflehog git .
+          ./trufflehog git file://$(pwd)
+
 
 
 
