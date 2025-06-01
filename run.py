@@ -8,7 +8,6 @@ from auth import auth_bp
 from books import books_bp
 from main import main_bp
 
-#secret = "123123"
 
 app = Flask(__name__)
 app.config.from_object(Config)
