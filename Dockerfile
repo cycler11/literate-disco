@@ -8,7 +8,6 @@ RUN apt-get update && apt-get install -y \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Создаем директорию для загрузок
 RUN mkdir -p /app/uploads
 RUN chmod 777 /app/uploads
 
