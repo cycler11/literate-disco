@@ -20,6 +20,7 @@ jobs:
         run: |
           latest_url=$(curl -s https://api.github.com/repos/trufflesecurity/trufflehog/releases/latest \
             | grep "browser_download_url.*linux_amd64" \
+            | head -n 1 \
             | cut -d '"' -f 4)
           curl -L $latest_url -o trufflehog
           chmod +x trufflehog
@@ -27,8 +28,6 @@ jobs:
       - name: Run TruffleHog scan
         run: |
           ./trufflehog git file://$(pwd)
-
-
 
 
   lint:
