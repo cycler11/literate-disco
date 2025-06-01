@@ -80,9 +80,9 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-#      - name: Run tests
-#        run: |
-#          pytest --maxfail=1 --disable-warnings -q
+      - name: Run tests
+        run: |
+          pytest --maxfail=100 --disable-warnings -q
 
   docs:
     runs-on: ubuntu-latest
