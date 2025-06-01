@@ -49,18 +49,18 @@ jobs:
         pip install safety
         safety check -r requirements.txt
 
-#    - name: Run Qodana scan
-#      uses: jetbrains/qodana-action@v2023.3
-#      with:
-#          project-dir: .
-#          save-report: true
-#          upload-report: false
+    - name: Run Qodana scan
+      uses: jetbrains/qodana-action@v2023.3
+      with:
+          project-dir: .
+          save-report: true
+          upload-report: false
 
-#    - name: Run linters
-#      run: |
-#        flake8 .
-#        black .
+    - name: Run linter black
+      run: black .
 
+    - name: Run linter flake8
+      run: flake8 .
 
   test:
     runs-on: ubuntu-latest
@@ -79,6 +79,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest
+
+#dorabotka a lot of errors right NOW
 
       - name: Run tests
         run: |
