@@ -1,0 +1,8 @@
+site_name: Literate Disco
+theme:
+  name: material
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
